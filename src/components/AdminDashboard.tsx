@@ -373,11 +373,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-500">Recruiter</span>
-                     <span className="text-sm text-gray-900">
-                          {project.user 
-                           ? `${project.user.firstName} ${project.user.lastName} (ID: ${project.user.id})` 
-                            : 'N/A'}
-                        </span>
+                      <span className="text-sm text-gray-900">
+                        {project.user ? `${project.user.firstName} ${project.user.lastName}` : 'N/A'}
+                      </span>
                     </div>
                     
                     {project.skills && project.skills.length > 0 && (
