@@ -20,6 +20,7 @@ import { User, Project } from '../types';
 import { api } from '../services/api';
 import CreateUserModal from './CreateUserModal';
 import CreateProjectModal from './CreateProjectModal';
+import EditUserFieldModal from './EditUserFieldModal';
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -30,10 +31,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState<'all' | 'freelancer' | 'recruiter' | 'admin'>('all');
+  const [filterType, setFilterType] = useState<'all' | 'freelancer' | 'recruiter' | 'admin' | 'validator'>('all');
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateUserModal, setShowCreateUserModal] = useState(false);
   const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
+  const [showEditUserModal, setShowEditUserModal] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+
   const [editingItem, setEditingItem] = useState<any>(null);
 
   useEffect(() => {
@@ -207,6 +211,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                     <option value="freelancer">Freelancers</option>
                     <option value="recruiter">Recruiters</option>
                     <option value="admin">Admins</option>
+                    <option value="validator">Validator</option>
                   </select>
                 </div>
               )}
@@ -302,7 +307,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                         <td className="px-6 py-4">
                           <div className="flex items-center space-x-2">
                             <button
-                              onClick={() => setEditingItem(user)}
+                              onClick={() => {
+                                      setSelectedUserId(user.id);
+                                      setShowEditUserModal(true);
+                                    }}    
                               className="p-2 text-gray-400 hover:text-indigo-600 transition-colors"
                             >
                               <Edit className="w-4 h-4" />
@@ -325,6 +333,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {filteredProjects.map((project) => (
                 <div key={project.id} className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
+                  <p className="text-xs text-gray-400">Project ID: {project.id}</p>
                   <div className="flex items-start justify-between mb-4">
                     <h3 className="font-semibold text-gray-900 text-lg">{project.title}</h3>
                     <div className="flex items-center space-x-2">
@@ -364,9 +373,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-500">Recruiter</span>
-                      <span className="text-sm text-gray-900">
-                        {project.user ? `${project.user.firstName} ${project.user.lastName}` : 'N/A'}
-                      </span>
+                     <span className="text-sm text-gray-900">
+                          {project.user 
+                           ? `${project.user.firstName} ${project.user.lastName} (ID: ${project.user.id})` 
+                            : 'N/A'}
+                        </span>
                     </div>
                     
                     {project.skills && project.skills.length > 0 && (
@@ -427,6 +438,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
         onClose={() => setShowCreateProjectModal(false)}
         onProjectCreated={loadData}
       />
+      {selectedUserId !== null && (
+  <EditUserFieldModal
+    isOpen={showEditUserModal}
+    onClose={() => setShowEditUserModal(false)}
+    userId={selectedUserId}
+    onSuccess={loadData}
+  />
+)}
+
     </div>
   );
 };

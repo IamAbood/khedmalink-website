@@ -16,7 +16,7 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ isOpen, onClose, onUs
     password: '',
     phone: '',
     link: '',
-    role: 'freelancer' as 'freelancer' | 'recruiter' | 'admin'
+    role: 'freelancer' as 'freelancer' | 'recruiter' | 'admin' | 'validator'
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -160,6 +160,7 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ isOpen, onClose, onUs
                   <option value="freelancer">Freelancer</option>
                   <option value="recruiter">Recruiter</option>
                   <option value="admin">Admin</option>
+                  <option value="validator">Validator</option>
                 </select>
               </div>
             </div>
