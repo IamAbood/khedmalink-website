@@ -261,11 +261,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onAdminClick }) => {
           <p className="text-gray-400 mb-4">
             Connecting talent with opportunity, one project at a time.
           </p>
-          <div className="flex justify-center space-x-6 text-gray-400">
-            <span className="hover:text-white transition-colors cursor-pointer">Privacy</span>
-            <span className="hover:text-white transition-colors cursor-pointer">Terms</span>
-            <span className="hover:text-white transition-colors cursor-pointer">Support</span>
-          </div>
+
         </div>
       </footer>
     </div>
