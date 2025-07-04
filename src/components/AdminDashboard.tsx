@@ -21,6 +21,7 @@ import { api } from '../services/api';
 import CreateUserModal from './CreateUserModal';
 import CreateProjectModal from './CreateProjectModal';
 import EditUserFieldModal from './EditUserFieldModal';
+import EditProjectStatusModal from './EditProjectStatusModal';
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -37,6 +38,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
   const [showEditUserModal, setShowEditUserModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [showEditProjectStatusModal, setShowEditProjectStatusModal] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+  const [selectedProjectStatus, setSelectedProjectStatus] = useState<string>('pending');
+  
 
   const [editingItem, setEditingItem] = useState<any>(null);
 
@@ -279,7 +284,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                             {user.phone && (
                               <div className="flex items-center text-sm text-gray-600">
                                 <Phone className="w-4 h-4 mr-2" />
-                                {user.phone}
+                                  {user.phone}
                               </div>
                             )}
                             {user.link && (
@@ -310,7 +315,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                               onClick={() => {
                                       setSelectedUserId(user.id);
                                       setShowEditUserModal(true);
-                                    }}    
+                                    }}//this will open the edit modal
                               className="p-2 text-gray-400 hover:text-indigo-600 transition-colors"
                             >
                               <Edit className="w-4 h-4" />
@@ -338,11 +343,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                     <h3 className="font-semibold text-gray-900 text-lg">{project.title}</h3>
                     <div className="flex items-center space-x-2">
                       <button
-                        onClick={() => setEditingItem(project)}
-                        className="p-1 text-gray-400 hover:text-indigo-600 transition-colors"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
+                                onClick={() => {
+                                  setSelectedProjectId(project.id);
+                                  setSelectedProjectStatus(project.status || 'open');
+                                  setShowEditProjectStatusModal(true);
+                                }}
+                                className="p-1 text-gray-400 hover:text-indigo-600 transition-colors"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
                       <button
                         onClick={() => handleDeleteProject(project.id)}
                         className="p-1 text-gray-400 hover:text-red-600 transition-colors"
@@ -444,9 +453,18 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     onSuccess={loadData}
   />
 )}
-
+{selectedProjectId !== null && (
+  <EditProjectStatusModal
+    isOpen={showEditProjectStatusModal}
+    onClose={() => setShowEditProjectStatusModal(false)}
+    projectId={selectedProjectId}
+    currentStatus={selectedProjectStatus}
+    onSuccess={loadData}
+  />
+)}
     </div>
   );
 };
+
 
 export default AdminDashboard;

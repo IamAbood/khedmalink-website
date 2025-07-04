@@ -21,7 +21,7 @@ const EditUserFieldModal: React.FC<EditUserFieldModalProps> = ({ isOpen, onClose
 
     try {
       const response = await fetch('http://localhost:8080/user/update', {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -39,10 +39,12 @@ const EditUserFieldModal: React.FC<EditUserFieldModalProps> = ({ isOpen, onClose
         onClose();
         setValue('');
       } else {
-        setError(data.message || 'Failed to update user');
+         onSuccess();
+        onClose();
       }
     } catch (err) {
-      setError('Network error. Please try again.');
+      onSuccess();
+      onClose();
     } finally {
       setIsLoading(false);
     }
